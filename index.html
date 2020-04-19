@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>ToDo Hero</title>
+    <link rel="stylesheet" href="../../css/photon.min.css">
+    <link rel="stylesheet" href="index.css">
+
+    <script>
+        window.$ = window.jQuery = require('jquery');
+        const fs = require('fs');
+        const _ = require('lodash');
+        let taskJSON = '';
+    </script>
+
+</head>
+
+<body>
+
+    <div class="window">
+        <div class="window-content">
+            <div class="pane-group ">
+                <div id="todo-pane" class="pane main-content todos">
+
+                    <label>Things to Do</label>
+                    <div class="todo-group">
+                    </div>
+                    <div class="form-group addTaskGroup">
+                        <span class='checkParent'>
+                            <span class="checkBox addTask">
+                                <span class='icon icon-plus-circled'></span>
+                            </span>
+                        </span>
+                        <input type="text" id="addTaskInput" class="form-control">
+                    </div>
+                    <br>
+                    <label>Things I've Done</label>
+                    <div class="completed-group">
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <footer class="toolbar toolbar-footer">
+            <h1 class="title">Footer</h1>
+        </footer>
+    </div>
+
+    <div class='hidden'>
+        <div id='todoTaskTemplate'>
+            <div class="form-group current-task">
+                <span class='checkParent'>
+                    <span class="checkBox markComplete">
+                        <span class='checkMark'></span>
+                    </span>
+                </span>
+                <input type="text" class="form-control task-text" value="">
+            </div>
+
+        </div>
+        <div id='completedTaskTemplate'>
+            <div class="form-group completed-task">
+                <span class='checkParent'>
+                    <span class="checkBox">
+                        <span class='icon icon-check'></span>
+                    </span>
+                </span>
+                <input type="text" class="form-control task-text" value="">
+                <span class='trash icon icon-trash'></span>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    $(document).ready(function() {
+        loadTasks();
+    });
+
+    $(document).on('click', ".addTask", addTask);
+    $(document).on('click', ".markComplete", completeTask);
+    $(document).on('click', ".trash", deleteCompletedTask);
+
+
+    $(document).on('mouseenter', "div.todo-group span.checkParent", function() {
+        $(this).find('span>span').addClass("icon icon-check");
+    });
+    $(document).on('mouseleave', "div.todo-group span.checkParent", function() {
+        $(this).find('span>span').removeClass("icon icon-check");
+    });
+
+    $(document).on('mouseenter', ".form-group.completed-task", function() {
+        $(this).find('span.trash').addClass("redBorder");
+    });
+    $(document).on('mouseleave', ".form-group.completed-task", function() {
+        $(this).find('span.trash').removeClass("redBorder");
+    });
+
+
+
+    function deleteCompletedTask() {
+        var task = $(this).closest('div.completed-task');
+        var taskDesc = $(task).find('input').val();
+        console.log(taskJSON);
+        _.each(taskJSON, function(item, index) {
+            console.log(item);
+            if (item && item.desc === taskDesc) {
+                task = taskJSON[index];
+                task.status = 'complete'
+                taskJSON.splice(index, 1);
+                var resp = fs.writeFileSync(__dirname + '/tasks.json', JSON.stringify(taskJSON));
+                $('.todo-group').empty();
+                $('.completed-group').empty();
+                loadTasks();
+                return;
+            }
+        })
+    }
+
+    function addTask() {
+        var newTaskDesc = $('#addTaskInput').val();
+
+        var newTask = {
+            desc: newTaskDesc,
+            status: 'todo'
+        }
+
+        if (_.isEmpty(newTaskDesc)) {
+            alert('Please enter a description');
+            return;
+        }
+
+        if (_.find(taskJSON, newTask)) {
+            alert('That task already exists');
+            return;
+        }
+        addTaskToJSON(newTask);
+        addTodoTask(newTask);
+        $('#addTaskInput').val('');
+    }
+
+    function completeTask() {
+        var taskDesc = $(this).closest('div.current-task').find('input').val();
+        var task;
+        _.each(taskJSON, function(item, index) {
+            if (item.desc === taskDesc) {
+                completeTaskInJSON(index)
+                    .then(() => {
+                        console.log('here in then...');
+                        $('.todo-group').empty();
+                        $('.completed-group').empty();
+                        loadTasks();
+                        return;
+                    })
+            }
+        })
+    }
+
+    function completeTaskInJSON(index) {
+        task = taskJSON[index];
+        task.status = 'complete'
+        taskJSON[index] = task;
+        var resp = fs.writeFileSync(__dirname + '/tasks.json', JSON.stringify(taskJSON));
+        return Promise.resolve();
+    }
+
+
+    function addTaskToJSON(newTask) {
+        taskJSON.push(newTask);
+        try {
+            var resp = fs.writeFileSync(__dirname + '/tasks.json', JSON.stringify(taskJSON));
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    function addTodoTask(newTask) {
+        var todoTemplate = $('#todoTaskTemplate').html();
+        var newRow = $.parseHTML(todoTemplate);
+        $(newRow).find('input').val(newTask.desc);
+        $('.todo-group').append(newRow);
+    }
+
+    function loadTasks() {
+        taskJSON = JSON.parse(fs.readFileSync(__dirname + '/tasks.json', 'utf8'));
+        var todoTemplate = $('#todoTaskTemplate').html();
+        var completedTempalte = $('#completedTaskTemplate').html();
+        _.each(taskJSON, function(item) {
+            if (item.status === 'todo') {
+                addTodoTask(item);
+            } else {
+                var temp = $('#completedTaskTemplate').html();
+                var newRow = $.parseHTML(temp);
+                $(newRow).find('input').val(item.desc);
+                $('.completed-group').append(newRow);
+            }
+        })
+    }
+</script>
+
+
+</html>

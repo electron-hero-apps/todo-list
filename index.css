@@ -1,0 +1,128 @@
+#leftDiv {
+    float: left;
+    margin-left: 15px;
+}
+
+#rightDiv {
+    float: right;
+    margin-right: 15px;
+}
+
+.todo-group {}
+
+#todo-pane {
+    padding: 15px;
+}
+
+div.form-group input[type=text] {
+    width: 90%;
+    position: relative;
+    padding-right: 20px;
+}
+
+div.form-group.completed-task input {
+    width: 80%;
+}
+
+/* div.form-group button:hover {
+    border: 1px solid red;
+} */
+.redBorder {}
+
+.checkParent, .checkParentDone, .addParent {
+    width: 20px;
+    height: 32px;
+    float: left;
+    padding-top: 3px;
+    padding-left: 5px;
+    margin-right: 10px;
+}
+
+.current-task>input {
+    pointer-events: none;
+}
+
+.completed-task input {
+    pointer-events: none;
+    border: 1px solid red;
+}
+
+.form-group {
+    padding-left: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 4px;
+}
+
+.form-group.current-task {}
+
+.form-group>input[type=text] {
+    border: 1px solid transparent;
+    height: 15px;
+    background-color: transparent;
+    color: #222;
+    font-size: 14px;
+}
+
+.main-content {
+    background-color: #f4f3f2;
+}
+
+.checkBox {
+    border: 1px solid #000;
+    border-radius: 10px;
+    float: left;
+    width: 20px;
+    height: 20px;
+    padding-left: 5px;
+    margin-right: 10px;
+}
+
+.addTask {
+    padding-left: 4px;
+    border: 1px solid transparent;
+}
+
+.completedTask {
+    padding-left: 2px;
+    border: 1px solid transparent;
+}
+
+.todos {
+    background-image: url('background.png');
+    /* The image used */
+    background-color: #cccccc;
+    /* Used if the image is unavailable */
+    /* You must set a specified height */
+    background-position: center;
+    /* Center the image */
+    background-repeat: no-repeat;
+    /* Do not repeat the image */
+    background-size: cover;
+    /* Resize the background image to cover the entire container */
+}
+
+label {
+    color: white;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+div.completed-group>div.form-group>span.checkParent>span.checkBox {
+    border: 1px solid transparent
+}
+
+.trash {
+    opacity: 0.5;
+    float: right;
+    padding-right: 10px;
+    padding-top: 3px;
+    opacity: 0;
+}
+
+.redBorder {
+    opacity: 0.5;
+}
