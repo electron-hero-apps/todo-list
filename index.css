@@ -12,6 +12,12 @@
 
 #todo-pane {
     padding: 15px;
+    width: 75%;
+}
+
+.pane-sm.sidebar {
+    width: 25%;
+    max-width: 500px;
 }
 
 div.form-group input[type=text] {
