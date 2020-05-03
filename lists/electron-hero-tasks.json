@@ -1,0 +1,13 @@
+{
+    "listName": "Electron Hero Tasks",
+    "tasks": [{
+        "desc": "Build more electron-hero apps",
+        "status": "todo"
+    }, {
+        "desc": "Work on electron-hero web site",
+        "status": "todo"
+    }, {
+        "desc": "Look into chat API's",
+        "status": "complete"
+    }]
+}

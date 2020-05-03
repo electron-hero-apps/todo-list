@@ -1,0 +1,13 @@
+{
+    "listName": "Work To Do List",
+    "tasks": [{
+        "desc": "Do something stupid",
+        "status": "todo"
+    }, {
+        "desc": "Work on electron-hero web site",
+        "status": "todo"
+    }, {
+        "desc": "Look into chat API's",
+        "status": "complete"
+    }]
+}

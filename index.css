@@ -132,3 +132,13 @@ div.completed-group>div.form-group>span.checkParent>span.checkBox {
 .redBorder {
     opacity: 0.5;
 }
+
+.list-group-item {
+    background-color: white;
+    border: none;
+    border-bottom: 1px solid #ddd;
+}
+
+.list-name {
+    font-weight: bold;
+}
