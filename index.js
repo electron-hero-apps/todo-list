@@ -5,6 +5,10 @@ $(document).ready(function() {
 	console.log('here in doc ready')
 	showLists();
 });
+const {
+	BrowserWindow
+} = require('electron').remote;
+
 
 $(document).on('click', ".addTask", addTask);
 $(document).on('click', ".markComplete", completeTask);
@@ -40,9 +44,25 @@ const {
 const menu = new Menu()
 
 menu.append(new MenuItem({
-	label: 'MenuItem1',
+	label: 'Details...',
 	click() {
-		console.log('item 1 clicked')
+		console.log('item 1 clicked');
+		var child = new BrowserWindow({
+			parent: remote.getCurrentWindow(),
+			width: 400,
+			height: 200,
+			modal: true,
+			show: false,
+			webPreferences: {
+		        nodeIntegration: true
+		    },
+			
+		});
+		child.loadFile(path.join(__dirname, 'listinfo.html'))
+		child.once('ready-to-show', () => {
+			child.show()
+		})
+
 	}
 }))
 
@@ -51,9 +71,10 @@ menu.append(new MenuItem({
 }))
 
 menu.append(new MenuItem({
-	label: 'MenuItem2',
-	type: 'checkbox',
-	checked: true
+	label: 'Delete List',
+	click() {
+		console.log('item 2 clicked')
+	}
 }))
 
 
@@ -62,7 +83,7 @@ window.addEventListener('contextmenu', (e) => {
 	e.preventDefault();
 	var x = e.clientX;
 	var y = e.clientY;
-	var el = document.elementFromPoint(x,y);
+	var el = document.elementFromPoint(x, y);
 	if ($(el).hasClass('list-group-item')) {
 		menu.popup({
 			window: remote.getCurrentWindow()
@@ -83,7 +104,7 @@ function deleteCompletedTask() {
 			console.log(taskJSON);
 			currentListData.tasks = taskJSON;
 
-			var resp = fs.writeFile(path.join(__dirname ,'lists' , currentFile), JSON.stringify(currentListData), function(err, info){
+			var resp = fs.writeFile(path.join(__dirname, 'lists', currentFile), JSON.stringify(currentListData), function(err, info) {
 				console.log(info);
 				$('.todo-group').empty();
 				$('.completed-group').empty();
@@ -147,7 +168,7 @@ function completeTaskInJSON(index) {
 	task.status = 'complete'
 	taskJSON[index] = task;
 	currentListData.tasks = taskJSON;
-	var resp = fs.writeFileSync(path.join(__dirname , 'lists' , currentFile), JSON.stringify(currentListData));
+	var resp = fs.writeFileSync(path.join(__dirname, 'lists', currentFile), JSON.stringify(currentListData));
 	return Promise.resolve();
 }
 
@@ -156,7 +177,7 @@ function addTaskToJSON(newTask) {
 	taskJSON.push(newTask);
 	try {
 		currentListData.tasks = taskJSON;
-		var resp = fs.writeFileSync(path.join(__dirname , 'lists' , currentFile), JSON.stringify(currentListData));
+		var resp = fs.writeFileSync(path.join(__dirname, 'lists', currentFile), JSON.stringify(currentListData));
 	} catch (err) {
 		console.log(err);
 	}

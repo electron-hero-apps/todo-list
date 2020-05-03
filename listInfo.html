@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>Electron Hero - Photon Starter</title>
+	<link rel="stylesheet" href="../../css/photon.min.css">
+
+</head>
+
+<script>
+	window.$ = window.jQuery = require('jquery');
+	const {
+		remote
+	} = require('electron')
+
+	function closeWindow() {
+		remote.getCurrentWindow().close();
+	}
+</script>
+
+
+<body>
+	<div class="window">
+		<div class="window-content">
+			<div class="pane-group">
+				<div class="pane">
+
+					hi there
+					<button onclick="closeWindow()" class="btn btn-primary">
+						Format JS
+					</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+</body>
+
+</html>
