@@ -29,6 +29,47 @@ $(document).on('mouseleave', ".form-group.completed-task", function() {
 	$(this).find('span.trash').removeClass("redBorder");
 });
 
+const {
+	remote
+} = require('electron')
+const {
+	Menu,
+	MenuItem
+} = remote
+
+const menu = new Menu()
+
+menu.append(new MenuItem({
+	label: 'MenuItem1',
+	click() {
+		console.log('item 1 clicked')
+	}
+}))
+
+menu.append(new MenuItem({
+	type: 'separator'
+}))
+
+menu.append(new MenuItem({
+	label: 'MenuItem2',
+	type: 'checkbox',
+	checked: true
+}))
+
+
+
+window.addEventListener('contextmenu', (e) => {
+	e.preventDefault();
+	var x = e.clientX;
+	var y = e.clientY;
+	var el = document.elementFromPoint(x,y);
+	if ($(el).hasClass('list-group-item')) {
+		menu.popup({
+			window: remote.getCurrentWindow()
+		})
+	}
+}, false)
+
 function deleteCompletedTask() {
 	var task = $(this).closest('div.completed-task');
 	var taskDesc = $(task).find('input').val();
@@ -116,7 +157,7 @@ function addTaskToJSON(newTask) {
 
 
 var newTaskListSidebarItem = '<li class="list-group-item" data-listname="shopping-list.json">' +
-	'<div class="media-body"><span class="list-name">Shopping List</span><p></p></div>' +
+	'<div class="media-body no-click"><span class="list-name no-click">Shopping List</span><p class="no-click"></p></div>' +
 	'</li>'
 
 
@@ -147,11 +188,11 @@ function showLists() {
 }
 
 function loadTasks(filename) {
-	
+
 	$('.todo-group').empty();
 	$('.completed-group').empty();
-		
-	taskJSON = JSON.parse(fs.readFileSync(path.join(__dirname,'lists',filename), 'utf8')).tasks;
+
+	taskJSON = JSON.parse(fs.readFileSync(path.join(__dirname, 'lists', filename), 'utf8')).tasks;
 	var todoTemplate = $('#todoTaskTemplate').html();
 	var completedTempalte = $('#completedTaskTemplate').html();
 	_.each(taskJSON, function(item) {

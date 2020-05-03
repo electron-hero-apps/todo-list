@@ -142,3 +142,7 @@ div.completed-group>div.form-group>span.checkParent>span.checkBox {
 .list-name {
     font-weight: bold;
 }
+
+.no-click {
+    pointer-events: none;
+}
