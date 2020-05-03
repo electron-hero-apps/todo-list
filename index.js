@@ -77,14 +77,19 @@ function deleteCompletedTask() {
 	_.each(taskJSON, function(item, index) {
 		console.log(item);
 		if (item && item.desc === taskDesc) {
-			task = taskJSON[index];
-			task.status = 'complete'
+			console.log('found something to delete at index ' + index);
 			taskJSON.splice(index, 1);
-			var resp = fs.writeFileSync(__dirname + '/tasks.json', JSON.stringify(taskJSON));
-			$('.todo-group').empty();
-			$('.completed-group').empty();
-			loadTasks();
-			return;
+			console.log('after delete');
+			console.log(taskJSON);
+			currentListData.tasks = taskJSON;
+
+			var resp = fs.writeFile(path.join(__dirname ,'lists' , currentFile), JSON.stringify(currentListData), function(err, info){
+				console.log(info);
+				$('.todo-group').empty();
+				$('.completed-group').empty();
+				loadTasks(currentFile);
+				return;
+			});
 		}
 	})
 }
@@ -130,7 +135,7 @@ function completeTask() {
 					console.log('here in then...');
 					$('.todo-group').empty();
 					$('.completed-group').empty();
-					loadTasks();
+					loadTasks(currentFile);
 					return;
 				})
 		}
@@ -141,7 +146,8 @@ function completeTaskInJSON(index) {
 	task = taskJSON[index];
 	task.status = 'complete'
 	taskJSON[index] = task;
-	var resp = fs.writeFileSync(__dirname + '/tasks.json', JSON.stringify(taskJSON));
+	currentListData.tasks = taskJSON;
+	var resp = fs.writeFileSync(path.join(__dirname , 'lists' , currentFile), JSON.stringify(currentListData));
 	return Promise.resolve();
 }
 
@@ -149,7 +155,8 @@ function completeTaskInJSON(index) {
 function addTaskToJSON(newTask) {
 	taskJSON.push(newTask);
 	try {
-		var resp = fs.writeFileSync(__dirname + '/tasks.json', JSON.stringify(taskJSON));
+		currentListData.tasks = taskJSON;
+		var resp = fs.writeFileSync(path.join(__dirname , 'lists' , currentFile), JSON.stringify(currentListData));
 	} catch (err) {
 		console.log(err);
 	}
@@ -192,7 +199,8 @@ function loadTasks(filename) {
 	$('.todo-group').empty();
 	$('.completed-group').empty();
 
-	taskJSON = JSON.parse(fs.readFileSync(path.join(__dirname, 'lists', filename), 'utf8')).tasks;
+	currentListData = JSON.parse(fs.readFileSync(path.join(__dirname, 'lists', filename), 'utf8'));
+	taskJSON = currentListData.tasks;
 	var todoTemplate = $('#todoTaskTemplate').html();
 	var completedTempalte = $('#completedTaskTemplate').html();
 	_.each(taskJSON, function(item) {
