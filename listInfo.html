@@ -4,6 +4,7 @@
 <head>
 	<title>Electron Hero - Photon Starter</title>
 	<link rel="stylesheet" href="../../css/photon.min.css">
+	<link rel="stylesheet" href="index.css">
 
 </head>
 
@@ -13,9 +14,28 @@
 		remote
 	} = require('electron')
 
+	var me = remote.getCurrentWindow();
+
+	$('document').ready(function(){
+		var listInfo = me.webContents.browserWindowOptions.listInfo;
+		$('#listTitle').val(listInfo.title);
+		$('#listSubTitle').val(listInfo.subTitle);
+	})
+
 	function closeWindow() {
-		remote.getCurrentWindow().close();
+		var info = {
+			title: $('#listTitle').val(),
+			subTitle: $('#listSubTitle').val()
+		}
+		me.webContents.browserWindowOptions.sendInfo(info);
+		me.close();
 	}
+
+	function cancelWindow() {
+		me.close();
+	}
+
+
 </script>
 
 
@@ -24,12 +44,27 @@
 		<div class="window-content">
 			<div class="pane-group">
 				<div class="pane">
+					<div class="list-properties">
+						<div class="input-field-container">
+							<div class="input-fields">
+								<span class="label">Title:</span>
+								<span><input id="listTitle" type="text" class="form-control" placeholder=""></span>
+							</div>
+							<div class="input-fields">
+								<span class="label">Sub-Title:</span>
+								<span><input id="listSubTitle" type="text" class="form-control" placeholder=""></span>
+							</div>
+						</div>
+						<div class="pull-bottom">
+							<button id='buttonApply' onclick="closeWindow()" class="btn btn-primary pull-right">
+								Apply
+							</button>
+							<button id='buttonCancel' onclick="cancelWindow()" class="btn btn-standard pull-right">
+								Cancel
+							</button>
 
-					hi there
-					<button onclick="closeWindow()" class="btn btn-primary">
-						Format JS
-					</button>
-
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

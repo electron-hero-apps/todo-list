@@ -18,6 +18,11 @@
 .pane-sm.sidebar {
     width: 25%;
     max-width: 500px;
+    background-color: #eeeeee;
+}
+
+.pane {
+    background-color: #eeeeee;
 }
 
 div.form-group input[type=text] {
@@ -145,4 +150,80 @@ div.completed-group>div.form-group>span.checkParent>span.checkBox {
 
 .no-click {
     pointer-events: none;
+}
+
+.list-properties {
+    margin: 15px;
+    margin-top: 15px;
+    float: left;
+    width: 92%;
+    padding-top: 5px;
+}
+
+.pull-bottom {
+    width: 100%;
+    float: left;
+    margin-top: 25px;
+}
+
+.input-fields {
+    float: left;
+    margin-bottom: 10px;
+}
+
+.input-fields:last-child {
+    margin-bottom: 0px;
+}
+
+.input-fields span {
+    float: left;
+    display: inline-block;
+}
+
+.input-fields span.label {
+    width: 125px;
+    font-weight: 500;
+    font-size: 13px;
+    text-align: right;
+    margin-right: 15px;
+    margin-top: 2px;
+}
+
+.input-fields span .form-control {
+    padding: 2px;
+    padding-left: 4px;
+    border-radius: 3px;
+    width: 175px;
+    border: 1px solid #ccc;
+}
+
+.input-field-container {
+    border-radius: 5px;
+    background-color: #e3e3e3;
+    border: 1px solid #d3d3d3;
+    float: left;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-top: -5px;
+}
+
+.input-field-spacer {
+    height: 10px;
+}
+
+#buttonCancel {
+    margin-right: 10px;
+}
+
+.list-title {
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.list-group-item.active span {
+    color: white;
+}
+
+.list-group-item.active p {
+    color: #ddd;
 }

@@ -1,6 +1,9 @@
 var currentListData = '';
 var currentFile = '';
 
+var currentListItem;
+
+
 $(document).ready(function() {
 	console.log('here in doc ready')
 	showLists();
@@ -46,7 +49,7 @@ const menu = new Menu()
 menu.append(new MenuItem({
 	label: 'Details...',
 	click() {
-		console.log('item 1 clicked');
+
 		var child = new BrowserWindow({
 			parent: remote.getCurrentWindow(),
 			width: 400,
@@ -54,12 +57,27 @@ menu.append(new MenuItem({
 			modal: true,
 			show: false,
 			webPreferences: {
-		        nodeIntegration: true
-		    },
-			
+				nodeIntegration: true
+			},
+			listInfo: {
+				title: $(currentListItem).find('.list-title').html(),
+				subTitle: $(currentListItem).find('.list-sub-title').html()
+			},
+			sendInfo: function(info) {
+				$(currentListItem).find('.list-title').html(info.title);
+				$(currentListItem).find('.list-sub-title').html(info.subTitle);
+				updateTitles(info.title, info.subTitle);
+			}
 		});
 		child.loadFile(path.join(__dirname, 'listinfo.html'))
-		child.once('ready-to-show', () => {
+		child.once('ready-to-show', (e) => {
+
+			child.on('closed', function(e) {
+				console.log('here on close...');
+				console.log(e.sender);
+
+				child = null;
+			})
 			child.show()
 		})
 
@@ -85,6 +103,7 @@ window.addEventListener('contextmenu', (e) => {
 	var y = e.clientY;
 	var el = document.elementFromPoint(x, y);
 	if ($(el).hasClass('list-group-item')) {
+		currentListItem = el;
 		menu.popup({
 			window: remote.getCurrentWindow()
 		})
@@ -163,6 +182,13 @@ function completeTask() {
 	})
 }
 
+function updateTitles(title, subTitle) {
+	currentListData.title = title;
+	currentListData.subTitle = subTitle;
+	var resp = fs.writeFileSync(path.join(__dirname, 'lists', currentFile), JSON.stringify(currentListData));
+
+}
+
 function completeTaskInJSON(index) {
 	task = taskJSON[index];
 	task.status = 'complete'
@@ -185,7 +211,7 @@ function addTaskToJSON(newTask) {
 
 
 var newTaskListSidebarItem = '<li class="list-group-item" data-listname="shopping-list.json">' +
-	'<div class="media-body no-click"><span class="list-name no-click">Shopping List</span><p class="no-click"></p></div>' +
+	'<div class="media-body no-click"><span class="list-title no-click">Shopping List</span><p class="list-sub-title no-click"></p></div>' +
 	'</li>'
 
 
@@ -207,7 +233,9 @@ function showLists() {
 				listData = JSON.parse(listData);
 			}
 			var sidebarItem = $.parseHTML(newTaskListSidebarItem);
-			$(sidebarItem).find('div > span').html(listData.listName);
+			$(sidebarItem).find('.list-title').html(listData.title);
+			$(sidebarItem).find('.list-sub-title').html(listData.subTitle);
+
 			$(sidebarItem).data('filename', file);
 			$('.list-group').append(sidebarItem);
 		})
