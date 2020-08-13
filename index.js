@@ -16,7 +16,6 @@ const {
 $(document).on('click', ".addTask", addTask);
 $(document).on('click', ".markComplete", completeTask);
 $(document).on('click', ".trash", deleteCompletedTask);
-
 $(document).on('click', '.list-group-item', handleListPaneClick);
 
 
@@ -36,95 +35,14 @@ $(document).on('mouseleave', ".form-group.completed-task", function() {
 	$(this).find('span.trash').removeClass("redBorder");
 });
 
-const {
-	remote
-} = require('electron')
-const {
-	Menu,
-	MenuItem
-} = remote
-
-const menu = new Menu()
-
-menu.append(new MenuItem({
-	label: 'Details...',
-	click() {
-
-		var child = new BrowserWindow({
-			parent: remote.getCurrentWindow(),
-			width: 400,
-			height: 200,
-			modal: true,
-			show: false,
-			webPreferences: {
-				nodeIntegration: true
-			},
-			listInfo: {
-				title: $(currentListItem).find('.list-title').html(),
-				subTitle: $(currentListItem).find('.list-sub-title').html()
-			},
-			sendInfo: function(info) {
-				$(currentListItem).find('.list-title').html(info.title);
-				$(currentListItem).find('.list-sub-title').html(info.subTitle);
-				updateTitles(info.title, info.subTitle);
-			}
-		});
-		child.loadFile(path.join(__dirname, 'listinfo.html'))
-		child.once('ready-to-show', (e) => {
-
-			child.on('closed', function(e) {
-				console.log('here on close...');
-				console.log(e.sender);
-
-				child = null;
-			})
-			child.show()
-		})
-
-	}
-}))
-
-menu.append(new MenuItem({
-	type: 'separator'
-}))
-
-menu.append(new MenuItem({
-	label: 'Delete List',
-	click() {
-		console.log('item 2 clicked')
-	}
-}))
-
-
-
-window.addEventListener('contextmenu', (e) => {
-	e.preventDefault();
-	var x = e.clientX;
-	var y = e.clientY;
-	var el = document.elementFromPoint(x, y);
-	if ($(el).hasClass('list-group-item')) {
-		currentListItem = el;
-		menu.popup({
-			window: remote.getCurrentWindow()
-		})
-	}
-}, false)
-
 function deleteCompletedTask() {
 	var task = $(this).closest('div.completed-task');
 	var taskDesc = $(task).find('input').val();
-	console.log(taskJSON);
 	_.each(taskJSON, function(item, index) {
-		console.log(item);
 		if (item && item.desc === taskDesc) {
-			console.log('found something to delete at index ' + index);
 			taskJSON.splice(index, 1);
-			console.log('after delete');
-			console.log(taskJSON);
 			currentListData.tasks = taskJSON;
-
 			var resp = fs.writeFile(path.join(__dirname, 'lists', currentFile), JSON.stringify(currentListData), function(err, info) {
-				console.log(info);
 				$('.todo-group').empty();
 				$('.completed-group').empty();
 				loadTasks(currentFile);
@@ -180,6 +98,10 @@ function completeTask() {
 				})
 		}
 	})
+}
+
+function saveAllTasksToJSON() {
+	
 }
 
 function updateTitles(title, subTitle) {

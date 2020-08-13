@@ -3,19 +3,23 @@
 
 <head>
     <title>ToDo Hero</title>
-    <link rel="stylesheet" href="../../css/photon.min.css">
+    <link rel="stylesheet" href="https://www.electron-hero.com/cdn/photon/photon.min.css">
     <link rel="stylesheet" href="index.css">
 
 
     <script>
+        const ipc = require('electron').ipcRenderer
+        let nodeRequirePath = ipc.sendSync('getRequirePath') + 'node_modules/';
+
         window.$ = window.jQuery = require('jquery');
         const fs = require('fs');
-        const _ = require('lodash');
-        const path = require('path');
+        const _ = require(nodeRequirePath + 'lodash');
+        const path = require(nodeRequirePath + 'path');
         let taskJSON = '';
 
     </script>
     <script src="index.js"></script>
+    <script src="contextMenu.js"></script>
 
     <script>
     </script>
@@ -29,29 +33,10 @@
             <div class="pane-group ">
                 <div class="pane-sm sidebar">
                     <ul class="list-group">
-                        <!-- <li class="list-group-item" data-listname="shopping-list.json">
-                            <div class="media-body">
-                                <span>Shopping List</span>
-                                <p></p>
-                            </div>
-                        </li>
-                        <li class="list-group-item" data-listname="electron-hero-stuff.json">
-                            <div class="media-body">
-                                <strong>Electron Hero Stuff</strong>
-                                <p></p>
-                            </div>
-                        </li>
-                        <li class="list-group-item" data-listname="honey-do.json">
-                            <div class="media-body">
-                                <strong>Honey-Do</strong>
-                                <p></p>
-                            </div>
-                        </li> -->
                     </ul>
                 </div>
 
                 <div id="todo-pane" class="pane main-content todos">
-
                     <label>Things to Do</label>
                     <div class="todo-group">
                     </div>
@@ -67,9 +52,12 @@
                     <label>Things I've Done</label>
                     <div class="completed-group">
                     </div>
-
-
                 </div>
+
+                <div id="details-pane">
+                    <button class="btn btn-large btn-default">Default</button>
+                </div>
+
             </div>
         </div>
         <footer class="toolbar toolbar-footer">
