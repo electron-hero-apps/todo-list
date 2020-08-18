@@ -1,0 +1,23 @@
+{
+    "name": "todo-list",
+    "version": "1.0.0",
+    "description": "Electron Hero App - Todo List",
+    "main": "mainWindow.json",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/electron-hero-apps/todo-list"
+    },
+    "keywords": [
+        "electron-hero-app",
+        "todo-list",
+        "todo",
+        "list",
+        "task"
+    ],
+    "author": "John M. Anderson",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/electron-hero-apps/todo-list/issues"
+    },
+    "homepage": "https://github.com/electron-hero-apps/todo-list#readme"
+}

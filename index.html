@@ -10,8 +10,7 @@
     <script>
         const ipc = require('electron').ipcRenderer
         let nodeRequirePath = ipc.sendSync('getRequirePath') + 'node_modules/';
-
-        window.$ = window.jQuery = require('jquery');
+        window.$ = window.jQuery = require(nodeRequirePath + 'jquery');
         const fs = require('fs');
         const _ = require(nodeRequirePath + 'lodash');
         const path = require(nodeRequirePath + 'path');
