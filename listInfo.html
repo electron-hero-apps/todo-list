@@ -3,13 +3,15 @@
 
 <head>
 	<title>Electron Hero - Photon Starter</title>
-	<link rel="stylesheet" href="../../css/photon.min.css">
+	<link rel="stylesheet" href="https://www.electron-hero.com/cdn/photon/photon.min.css">
 	<link rel="stylesheet" href="index.css">
 
 </head>
 
 <script>
-	window.$ = window.jQuery = require('jquery');
+	const ipc = require('electron').ipcRenderer
+	let nodeRequirePath = ipc.sendSync('getRequirePath') + 'node_modules/';
+	window.$ = window.jQuery = require(nodeRequirePath + 'jquery');
 	const {
 		remote
 	} = require('electron')
