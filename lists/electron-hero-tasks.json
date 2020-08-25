@@ -1,1 +1,1 @@
-{"listName":"Work To Do List","tasks":[{"desc":"Do something stupid","status":"todo"},{"desc":"Work on electron-hero web site","status":"todo"}],"title":"To-Do List","subTitle":"get this stuff done"}
+{"listName":"Work To Do List","tasks":[{"desc":"Do something stupid","status":"todo"},{"desc":"Work on electron-hero web site","status":"complete"},{"desc":"look into keychain access for apps","status":"todo"}],"title":"To-Do List","subTitle":"get this stuff done"}
